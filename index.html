@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Year 7 Maths Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one centred working column; start → one question per card → results report. */
+:root{
+  --bg:#F3F5F9; --surface:#FFFFFF; --ink:#16203A; --muted:#5B6782; --line:#D9DEE8;
+  --accent:#2453C9; --accent-soft:#E6EDFC; --mark:#F0A429;
+  --good:#1E8A55; --good-soft:#E3F4EA; --bad:#C63B3B; --bad-soft:#FBE7E7;
+  --fig-fill:#EEF3FD;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1524; --surface:#18203A; --ink:#E8ECF6; --muted:#9AA6C2; --line:#2C3756;
+    --accent:#7FA2FF; --accent-soft:#22305A; --mark:#F3B54A;
+    --good:#4CC788; --good-soft:#163A2A; --bad:#FF7B7B; --bad-soft:#40202A; --fig-fill:#1F2B4D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1524; --surface:#18203A; --ink:#E8ECF6; --muted:#9AA6C2; --line:#2C3756;
+  --accent:#7FA2FF; --accent-soft:#22305A; --mark:#F3B54A;
+  --good:#4CC788; --good-soft:#163A2A; --bad:#FF7B7B; --bad-soft:#40202A; --fig-fill:#1F2B4D;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:800}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.muted{color:var(--muted)}
+.hidden{display:none !important}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:11px 18px;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0F1524}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0F1524}}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* start */
+.hero{display:flex;flex-direction:column;gap:10px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:600;font-size:15px}
+.field input{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.err{color:var(--bad);font-size:15px;min-height:1.4em}
+.topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{font-size:14px;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
+.facts{display:flex;gap:22px;flex-wrap:wrap;font-size:15px}
+.facts b{font-family:var(--display);font-size:22px;display:block;color:var(--accent)}
+@media (max-width:560px){.form{grid-template-columns:1fr}}
+
+/* test */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.who{font-weight:600}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--accent);transition:width .25s}
+.nav{display:grid;grid-template-columns:repeat(15,1fr);gap:6px}
+@media (max-width:640px){.nav{grid-template-columns:repeat(8,1fr)}}
+.timer{font-family:var(--display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;padding:4px 12px;border-radius:10px;background:var(--accent-soft);color:var(--ink)}
+.timer.low{background:var(--bad-soft);color:var(--bad)}
+.nav button{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:6px 0;font-size:14px;font-variant-numeric:tabular-nums}
+.nav button.done{background:var(--accent-soft);color:var(--ink);border-color:var(--accent-soft)}
+.nav button.cur{border:2px solid var(--accent);color:var(--ink);font-weight:600}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.qnum{font-family:var(--display);font-weight:800;font-size:22px;color:var(--accent)}
+.tag{font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.qtext{font-size:19px;margin:4px 0 14px}
+.qtext b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 62%, color-mix(in srgb, var(--mark) 35%, transparent) 0)}
+.figure{display:flex;justify-content:center;margin:6px 0 16px;overflow-x:auto}
+.fig{width:100%;max-width:420px;height:auto}
+.fig.wide{max-width:600px}
+.fig .ln{stroke:var(--ink);stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.fig .sh{stroke:var(--ink);stroke-width:2.4;fill:var(--fig-fill);stroke-linejoin:round}
+.fig .dash{stroke:var(--muted);stroke-width:1.8;stroke-dasharray:6 5;fill:none}
+.fig .mk{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round}
+.fig .acc{stroke:var(--accent);stroke-width:5;fill:none;stroke-linecap:round}
+.fig .dot{fill:var(--accent)}
+.fig .open{fill:var(--surface);stroke:var(--accent);stroke-width:3}
+.fig .lb{fill:var(--ink);font-family:var(--body);font-size:15px;font-weight:500;paint-order:stroke;stroke:var(--fig-fill);stroke-width:5px;stroke-linejoin:round}
+.fig .sm{fill:var(--muted);font-family:var(--body);font-size:12px}
+.fig .tk{stroke:var(--ink);stroke-width:1.6}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:12px 14px;min-height:62px}
+.opt:hover{border-color:var(--accent)}
+.opt .L{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:600;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .L{background:var(--accent);color:#fff;border-color:var(--accent)}
+.foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}
+.foot .right{display:flex;gap:10px}
+.kbd{font-size:13px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,15,30,.55);display:grid;place-items:center;padding:16px;z-index:9}
+.modal .card{max-width:440px;display:flex;flex-direction:column;gap:14px}
+.modal .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+
+/* results */
+.score{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center}
+@media (max-width:560px){.score{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.ring text{font-family:var(--display);font-weight:800}
+.big{font-family:var(--display);font-size:30px;font-weight:800}
+.pill{display:inline-block;padding:5px 12px;border-radius:999px;font-weight:600;font-size:15px}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.mid{background:color-mix(in srgb, var(--mark) 22%, transparent);color:var(--ink)}
+.tbl{display:flex;flex-direction:column;gap:10px}
+.trow{display:grid;grid-template-columns:minmax(0,1.4fr) 1fr 64px;gap:12px;align-items:center;font-size:15px}
+.tbar{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.tbar span{display:block;height:100%}
+.tnum{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.review{display:flex;flex-direction:column;gap:14px}
+.rv{border:1px solid var(--line);border-left:5px solid var(--good);border-radius:12px;padding:16px;background:var(--surface)}
+.rv.x{border-left-color:var(--bad)}
+.rv .qtext{font-size:17px;margin:6px 0 10px}
+.ans{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px}
+.ans span b{font-weight:600}
+.ok{color:var(--good)} .no{color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.toast{font-size:14px;color:var(--good);min-height:1.2em}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  startup: { typeset: false }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+</head>
+<body>
+<main class="wrap">
+
+<!-- START -->
+<section id="vStart" class="card hero">
+  <div class="eyebrow">Cambridge Lower Secondary · Stage 7 · 5-sinf</div>
+  <h1>Year 7 Mathematics Test</h1>
+  <p class="muted" style="margin:0">Har safar savollar bazasidan <b>15 ta savol</b> tasodifiy tanlanadi. Sonlar va chizmalar ham har gal yangilanadi. Testga <b>45 daqiqa</b> vaqt beriladi: vaqt tugaganda test o'zi yakunlanadi.</p>
+  <div class="facts">
+    <div><b>15</b>savol</div>
+    <div><b>45</b>daqiqa</div>
+    <div><b>9</b>mavzu</div>
+    <div><b>A–D</b>bitta to'g'ri javob</div>
+  </div>
+  <form id="startForm" class="form" novalidate>
+    <div class="field"><label for="fName">Ism</label><input id="fName" autocomplete="given-name" placeholder="Masalan: Aziza"></div>
+    <div class="field"><label for="lName">Familiya</label><input id="lName" autocomplete="family-name" placeholder="Masalan: Karimova"></div>
+    <div class="err" id="startErr" role="alert"></div>
+    <div style="display:flex;justify-content:flex-end;align-items:end"><button class="btn primary" type="submit" id="startBtn">Testni boshlash</button></div>
+  </form>
+  <div>
+    <div class="muted" style="font-size:14px;margin-top:6px">Mavzular</div>
+    <div class="topics" id="topicChips"></div>
+  </div>
+</section>
+
+<!-- TEST -->
+<section id="vTest" class="hidden" aria-live="polite">
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <div class="bar"><span class="who" id="who"></span><span class="timer" id="timer" aria-label="Qolgan vaqt">45:00</span><span class="muted" id="answeredInfo"></span></div>
+    <div class="progress"><span id="prog" style="width:0"></span></div>
+    <div class="nav" id="nav"></div>
+  </div>
+  <div class="card" id="qcard" style="margin-top:18px"></div>
+</section>
+
+<!-- RESULTS -->
+<section id="vRes" class="hidden" style="display:flex;flex-direction:column;gap:18px"></section>
+
+</main>
+
+<div class="modal hidden" id="confirm" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+  <div class="card">
+    <h3 id="cTitle">Testni yakunlaysizmi?</h3>
+    <p id="cMsg" style="margin:0"></p>
+    <div class="row"><button class="btn" id="cNo">Qaytish</button><button class="btn primary" id="cYes">Ha, yakunlash</button></div>
+  </div>
+</div>
+
+<!-- ===================== QUESTION BANK (pure, no DOM) ===================== -->
+<script id="gen">
+const T = String.raw;
+const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const fx = x => { const v = +(+x).toFixed(10); let s = String(v); if (s.includes('e')) s = v.toFixed(12).replace(/0+$/, '').replace(/\.$/, ''); return s; };
+const big = x => { const s = fx(x); const [i, d] = s.replace('-', '').split('.'); const g = i.length > 4 ? i.replace(/\B(?=(\d{3})+(?!\d))/g, '\\,') : i; return (s.startsWith('-') ? '-' : '') + g + (d ? '.' + d : ''); };
+const m = s => '\\(' + s + '\\)';
+const M = x => m(big(x));
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const lcm = (a, b) => a / gcd(a, b) * b;
+const pw = (v, p) => p === 0 ? '' : p === 1 ? v : `${v}^{${p}}`;
+function poly(ts) { let out = ''; for (const [c, v] of ts) { if (c === 0) continue; const a = Math.abs(c); const t = (a === 1 && v) ? v : fx(a) + v; out += out === '' ? (c < 0 ? '-' : '') + t : (c < 0 ? ' - ' : ' + ') + t; } return out || '0'; }
+const nz = (a, b) => { let v; do { v = rnd(a, b); } while (v === 0); return v; };
+function pool(correct, cands) { const seen = new Set([correct]); const out = []; for (const c of shuffle(cands)) { if (c == null || seen.has(c) || /NaN|undefined|Infinity/.test(c)) continue; seen.add(c); out.push(c); if (out.length === 3) break; } return out.length === 3 ? out : null; }
+
+/* ---------- SVG helpers ---------- */
+const P = (x, y) => ({ x, y });
+const sub = (a, b) => P(a.x - b.x, a.y - b.y), add = (a, b) => P(a.x + b.x, a.y + b.y), mul = (a, k) => P(a.x * k, a.y * k);
+const len = a => Math.hypot(a.x, a.y), unit = a => mul(a, 1 / len(a));
+const r1 = v => Math.round(v * 10) / 10;
+const svg = (w, h, inner, cls = '') => `<svg class="fig ${cls}" viewBox="0 0 ${w} ${h}" role="img" aria-label="diagram">${inner}</svg>`;
+const ln = (a, b, c = 'ln') => `<line x1="${r1(a.x)}" y1="${r1(a.y)}" x2="${r1(b.x)}" y2="${r1(b.y)}" class="${c}"/>`;
+const pg = (pts, c = 'sh') => `<polygon points="${pts.map(p => r1(p.x) + ',' + r1(p.y)).join(' ')}" class="${c}"/>`;
+const tx = (p, s, c = 'lb', anchor = 'middle') => `<text x="${r1(p.x)}" y="${r1(p.y)}" text-anchor="${anchor}" dominant-baseline="middle" class="${c}">${s}</text>`;
+function ticks(a, b, k) { const M_ = mul(add(a, b), .5), u = unit(sub(b, a)), n = P(-u.y, u.x); let s = ''; for (let i = 0; i < k; i++) { const o = add(M_, mul(u, (i - (k - 1) / 2) * 6)); s += ln(add(o, mul(n, -7)), add(o, mul(n, 7)), 'mk'); } return s; }
+function arrows(a, b, k, sh = 0) { const M_ = add(mul(add(a, b), .5), mul(unit(sub(b, a)), sh)), u = unit(sub(b, a)), n = P(-u.y, u.x); let s = ''; for (let i = 0; i < k; i++) { const tip = add(M_, mul(u, (i - (k - 1) / 2) * 9 + 4)); s += `<polyline points="${[add(add(tip, mul(u, -8)), mul(n, 6)), tip, add(add(tip, mul(u, -8)), mul(n, -6))].map(p => r1(p.x) + ',' + r1(p.y)).join(' ')}" class="mk"/>`; } return s; }
+function rightAng(v, a, b, s = 13) { const u1 = mul(unit(sub(a, v)), s), u2 = mul(unit(sub(b, v)), s); return `<polyline points="${[add(v, u1), add(add(v, u1), u2), add(v, u2)].map(p => r1(p.x) + ',' + r1(p.y)).join(' ')}" class="mk"/>`; }
+const note = (w, h) => tx(P(w - 6, h - 8), 'Not drawn to scale', 'sm', 'end');
+
+/* ---------- quadrilaterals ---------- */
+const QUADS = {
+  square: () => { const [A, B, C, D] = [P(80, 30), P(210, 30), P(210, 160), P(80, 160)]; return pg([A, B, C, D]) + [[A, B], [B, C], [C, D], [D, A]].map(([p, q]) => ticks(p, q, 1)).join('') + rightAng(A, B, D) + rightAng(B, A, C) + rightAng(C, B, D) + rightAng(D, A, C); },
+  rectangle: () => { const [A, B, C, D] = [P(45, 45), P(245, 45), P(245, 150), P(45, 150)]; return pg([A, B, C, D]) + ticks(A, B, 1) + ticks(D, C, 1) + ticks(B, C, 2) + ticks(A, D, 2) + rightAng(A, B, D) + rightAng(B, A, C) + rightAng(C, B, D) + rightAng(D, A, C); },
+  rhombus: () => { const [A, B, C, D] = [P(40, 150), P(160, 150), P(232, 54), P(112, 54)]; return pg([A, B, C, D]) + [[A, B], [B, C], [D, C], [A, D]].map(([p, q]) => ticks(p, q, 1)).join('') + arrows(A, B, 1, 24) + arrows(D, C, 1, 24) + arrows(A, D, 2, 26) + arrows(B, C, 2, 26); },
+  parallelogram: () => { const [A, B, C, D] = [P(30, 150), P(190, 150), P(250, 50), P(90, 50)]; return pg([A, B, C, D]) + ticks(A, B, 1) + ticks(D, C, 1) + ticks(A, D, 2) + ticks(B, C, 2) + arrows(A, B, 1, 26) + arrows(D, C, 1, 26) + arrows(A, D, 2, 28) + arrows(B, C, 2, 28); },
+  kite: () => { const [A, B, C, D] = [P(145, 20), P(215, 80), P(145, 170), P(75, 80)]; return pg([A, B, C, D]) + ticks(A, B, 1) + ticks(A, D, 1) + ticks(C, B, 2) + ticks(C, D, 2); },
+  trapezium: () => { const [A, B, C, D] = [P(30, 150), P(250, 150), P(205, 55), P(95, 55)]; return pg([A, B, C, D]) + arrows(A, B, 1) + arrows(D, C, 1); },
+  'isosceles trapezium': () => { const [A, B, C, D] = [P(30, 150), P(250, 150), P(190, 55), P(90, 55)]; return pg([A, B, C, D]) + arrows(A, B, 1) + arrows(D, C, 1) + ticks(A, D, 1) + ticks(B, C, 1); },
+};
+function regPoly(n) { const c = P(140, 100), R = 80, pts = []; for (let k = 0; k < n; k++) { const t = Math.PI / 2 + Math.PI / n + 2 * Math.PI * k / n; pts.push(P(c.x + R * Math.cos(t), c.y + R * Math.sin(t))); } let s = pg(pts); for (let i = 0; i < n; i++) s += ticks(pts[i], pts[(i + 1) % n], 1); return svg(280, 200, s); }
+function numberLine(L, R, lc, rc, mode) { // mode: 'both' | 'gt' (x > L ...) | 'lt'
+  const lo = Math.min(L, R) - 2, hi = Math.max(L, R) + 2, W = 560, x0 = 30, x1 = W - 30, X = v => x0 + (v - lo) * (x1 - x0) / (hi - lo), y = 60;
+  let s = ln(P(x0 - 12, y), P(x1 + 12, y)) + `<polyline points="${x1 + 4},${y - 6} ${x1 + 14},${y} ${x1 + 4},${y + 6}" class="ln"/><polyline points="${x0 - 4},${y - 6} ${x0 - 14},${y} ${x0 - 4},${y + 6}" class="ln"/>`;
+  for (let v = lo; v <= hi; v++) s += ln(P(X(v), y - 7), P(X(v), y + 7), 'tk') + tx(P(X(v), y + 26), v < 0 ? '−' + (-v) : v);
+  if (mode === 'both') s += ln(P(X(L), y), P(X(R), y), 'acc') + `<circle cx="${X(L)}" cy="${y}" r="8" class="${lc ? 'dot' : 'open'}"/><circle cx="${X(R)}" cy="${y}" r="8" class="${rc ? 'dot' : 'open'}"/>`;
+  else if (mode === 'gt') s += ln(P(X(L), y), P(x1 + 6, y), 'acc') + `<polyline points="${x1 - 4},${y - 9} ${x1 + 8},${y} ${x1 - 4},${y + 9}" class="acc" style="stroke-width:4"/><circle cx="${X(L)}" cy="${y}" r="8" class="${lc ? 'dot' : 'open'}"/>`;
+  else s += ln(P(x0 - 6, y), P(X(L), y), 'acc') + `<polyline points="${x0 + 4},${y - 9} ${x0 - 8},${y} ${x0 + 4},${y + 9}" class="acc" style="stroke-width:4"/><circle cx="${X(L)}" cy="${y}" r="8" class="${lc ? 'dot' : 'open'}"/>`;
+  return svg(W, 100, s, 'wide');
+}
+function circleFig(val, isDiam) { const c = P(140, 100), R = 72; let s = `<circle cx="${c.x}" cy="${c.y}" r="${R}" class="sh"/>` + `<circle cx="${c.x}" cy="${c.y}" r="3.5" class="dot"/>`;
+  if (isDiam) s += ln(P(c.x - R, c.y), P(c.x + R, c.y), 'mk') + tx(P(c.x, c.y - 16), `${val} cm`);
+  else s += ln(c, P(c.x + R * Math.cos(-0.5), c.y + R * Math.sin(-0.5)), 'mk') + tx(P(c.x + 26, c.y - 30), `${val} cm`);
+  return svg(280, 200, s); }
+function paraFig(b, h, sl) { const A = P(40, 155), B = P(220, 155), C = P(275, 50), D = P(95, 50), F = P(95, 155);
+  return svg(320, 200, pg([A, B, C, D]) + ln(D, F, 'dash') + rightAng(F, D, B, 11) + tx(P(130, 176), `${b} cm`) + tx(P(108, 108), `${h} cm`, 'lb', 'start') + tx(P(50, 98), `${sl} cm`, 'lb', 'end') + note(320, 200)); }
+function trapFig(a, b, h) { const A = P(30, 155), B = P(270, 155), C = P(210, 50), D = P(90, 50), F = P(90, 155);
+  return svg(300, 200, pg([A, B, C, D]) + arrows(A, B, 1) + arrows(D, C, 1) + ln(D, F, 'dash') + rightAng(F, D, B, 11) + tx(P(150, 34), `${a} cm`) + tx(P(150, 177), `${b} cm`) + tx(P(98, 108), `${h} cm`, 'lb', 'start') + note(300, 200)); }
+function triFig(b, h) { const A = P(30, 155), B = P(250, 155), C = P(170, 35), F = P(170, 155);
+  return svg(280, 200, pg([A, B, C]) + ln(C, F, 'dash') + rightAng(F, C, B, 11) + tx(P(110, 177), `${b} cm`) + tx(P(162, 100), `${h} cm`, 'lb', 'end') + note(280, 200)); }
+function cuboidFig(l, w, h) { const o = P(70, 80), W_ = 170, H = 90, d = P(70, -45);
+  const A = o, B = P(o.x + W_, o.y), C = P(o.x + W_, o.y + H), D = P(o.x, o.y + H), A2 = add(A, d), B2 = add(B, d), C2 = add(C, d), D2 = add(D, d);
+  return svg(340, 200, pg([A, B, C, D]) + pg([A, A2, B2, B]) + pg([B, B2, C2, C]) + ln(D, D2, 'dash') + ln(D2, A2, 'dash') + ln(D2, C2, 'dash') + tx(P(o.x + W_ / 2, o.y + H + 20), `${l} cm`) + tx(P(o.x - 8, o.y + H / 2), `${h} cm`, 'lb', 'end') + tx(P(C.x + d.x / 2 + 12, C.y + d.y / 2 + 8), `${w} cm`, 'lb', 'start') + note(340, 200)); }
+function prismFig(b, h, L, hyp) { const P1 = P(70, 165), P2 = P(180, 165), P3 = P(70, 75), d = P(130, -50), Q1 = add(P1, d), Q2 = add(P2, d), Q3 = add(P3, d);
+  let s = pg([P3, Q3, Q2, P2]) + pg([P1, P2, P3]) + ln(P1, Q1, 'dash') + ln(Q1, Q2, 'dash') + ln(Q1, Q3, 'dash') + rightAng(P1, P2, P3, 11) + tx(P(125, 184), `${b} cm`) + tx(P(60, 120), `${h} cm`, 'lb', 'end') + tx(P(P2.x + d.x / 2 + 10, P2.y + d.y / 2 + 10), `${L} cm`, 'lb', 'start');
+  if (hyp) s += tx(P(112, 134), `${hyp} cm`);
+  return svg(360, 200, s + note(360, 200)); }
+function pyramidFig(sd, t) { const B1 = P(40, 165), B2 = P(190, 165), B3 = P(255, 120), B4 = P(105, 120), Ap = P(150, 25), Mb = P(115, 165);
+  const s = pg([B1, B2, Ap]) + pg([B2, B3, Ap]) + ln(B1, B4, 'dash') + ln(B4, B3, 'dash') + ln(B4, Ap, 'dash') + ln(Ap, Mb, 'dash') + rightAng(Mb, Ap, B2, 10) + tx(P(115, 184), `${sd} cm`) + tx(P(140, 112), `${t} cm`, 'lb', 'start');
+  return svg(300, 200, s + note(300, 200)); }
+
+/* ---------- extra figures for Stage 7 ---------- */
+function rectFig(w, h) { const A = P(50, 40), B = P(250, 40), C = P(250, 150), D = P(50, 150);
+  return svg(300, 190, pg([A, B, C, D]) + rightAng(D, A, C, 11) + tx(P(150, 170), `${w} cm`) + tx(P(40, 95), `${h} cm`, 'lb', 'end') + note(300, 190)); }
+function lShapeFig(W, H, a, b) { const x0 = 50, y0 = 25, Wd = 230, Hd = 150, aw = Math.max(50, Math.min(150, a / W * Wd)), bh = Math.max(40, Math.min(105, b / H * Hd));
+  const pts = [P(x0, y0), P(x0 + Wd - aw, y0), P(x0 + Wd - aw, y0 + bh), P(x0 + Wd, y0 + bh), P(x0 + Wd, y0 + Hd), P(x0, y0 + Hd)];
+  return svg(330, 210, pg(pts) + tx(P(x0 + Wd / 2, y0 + Hd + 18), `${W} cm`) + tx(P(x0 - 8, y0 + Hd / 2), `${H} cm`, 'lb', 'end') + tx(P(x0 + (Wd - aw) / 2, y0 - 12), `${W - a} cm`) + tx(P(x0 + Wd + 8, y0 + bh + (Hd - bh) / 2), `${H - b} cm`, 'lb', 'start') + note(330, 210)); }
+function houseFig(w, h, t) { const A = P(60, 175), B = P(240, 175), C = P(240, 95), D = P(60, 95), E = P(150, 25), F = P(150, 95);
+  return svg(320, 215, pg([A, B, C, D]) + pg([D, C, E]) + ln(E, F, 'dash') + rightAng(F, E, C, 10) + tx(P(150, 196), `${w} cm`) + tx(P(250, 135), `${h} cm`, 'lb', 'start') + tx(P(158, 62), `${t} cm`, 'lb', 'start') + note(320, 215)); }
+function compCuboidFig(L, D, H1, l, H2) { const d = P(55, -35), x0 = 45, yb = 175, Ld = 200, h1 = 60, h2 = 55, ld = Math.max(70, Math.min(140, l / L * Ld));
+  const A = P(x0, yb - h1), B = P(x0 + Ld, yb - h1), C = P(x0 + Ld, yb), E = P(x0, yb);
+  let s = pg([A, B, C, E]) + pg([A, add(A, d), add(B, d), B]) + pg([B, add(B, d), add(C, d), C]);
+  const A2 = P(x0, yb - h1 - h2), B2 = P(x0 + ld, yb - h1 - h2), C2 = P(x0 + ld, yb - h1);
+  s += pg([A2, B2, C2, A]) + pg([A2, add(A2, d), add(B2, d), B2]) + pg([B2, add(B2, d), add(C2, d), C2]);
+  s += tx(P(x0 + Ld / 2, yb + 18), `${L} cm`) + tx(P(x0 - 8, yb - h1 / 2), `${H1} cm`, 'lb', 'end') + tx(P(x0 - 8, yb - h1 - h2 / 2), `${H2} cm`, 'lb', 'end') + tx(P(x0 + ld / 2, yb - h1 - h2 + 16), `${l} cm`) + tx(P(C.x + d.x / 2 + 10, C.y + d.y / 2 + 6), `${D} cm`, 'lb', 'start');
+  return svg(330, 215, s + note(330, 215)); }
+function circlePartsFig() { const c = P(150, 122), R = 75, at = t => P(c.x + R * Math.cos(t * Math.PI / 180), c.y + R * Math.sin(t * Math.PI / 180));
+  const A = at(-40), B = at(180), C = at(0), D = at(120), E = at(60), T_ = at(-125); const u = unit(sub(T_, c)), tg = P(-u.y, u.x), Pp = add(T_, mul(tg, 55)), Qq = add(T_, mul(tg, -55));
+  let s = `<circle cx="${c.x}" cy="${c.y}" r="${R}" class="sh"/>` + ln(c, A) + ln(B, C) + ln(D, E) + ln(Pp, Qq) + `<circle cx="${c.x}" cy="${c.y}" r="3.5" class="dot"/>`;
+  const lab = (p, s_, k = 14) => tx(add(p, mul(unit(sub(p, c)), k)), s_);
+  s += tx(P(c.x + 2, c.y + 15), 'O') + lab(A, 'A') + lab(B, 'B') + lab(C, 'C') + lab(D, 'D') + lab(E, 'E') + tx(add(Pp, mul(tg, 12)), 'P') + tx(add(Qq, mul(tg, -12)), 'Q');
+  return svg(300, 230, s); }
+function congFig() { const A = P(30, 160), B = P(170, 160), C = P(70, 55); const rot = p => P(470 - p.x, 215 - p.y); const Pp = rot(A), Q = rot(B), R_ = rot(C);
+  const lab = (p, cen, s) => tx(add(p, mul(unit(sub(p, cen)), 15)), s); const g1 = mul(add(add(A, B), C), 1 / 3), g2 = mul(add(add(Pp, Q), R_), 1 / 3);
+  let s = pg([A, B, C]) + pg([Pp, Q, R_]) + lab(A, g1, 'A') + lab(B, g1, 'B') + lab(C, g1, 'C') + lab(Pp, g2, 'P') + lab(Q, g2, 'Q') + lab(R_, g2, 'R');
+  return svg(480, 220, s, 'wide'); }
+function netFig(kind) { const sq = (x, y, w, h) => pg([P(x, y), P(x + w, y), P(x + w, y + h), P(x, y + h)]); let s = '';
+  if (kind === 'cube') { const k = 45, x = 60, y = 15; s = sq(x + k, y, k, k) + sq(x, y + k, k, k) + sq(x + k, y + k, k, k) + sq(x + 2 * k, y + k, k, k) + sq(x + 3 * k, y + k, k, k) + sq(x + k, y + 2 * k, k, k); return svg(300, 160, s); }
+  if (kind === 'cuboid') { const a = 70, b = 35, c = 45, x = 25, y = 10; s = sq(x + c, y, a, b) + sq(x, y + b, c, c) + sq(x + c, y + b, a, c) + sq(x + c + a, y + b, c, c) + sq(x + 2 * c + a, y + b, a, c) + sq(x + c, y + b + c, a, b); return svg(330, 140, s); }
+  if (kind === 'prism') { const w = 50, h = 90, x = 45, y = 35; s = sq(x, y, w, h) + sq(x + w, y, w, h) + sq(x + 2 * w, y, w, h) + pg([P(x + w, y), P(x + 2 * w, y), P(x + 1.5 * w, y - 34)]) + pg([P(x + w, y + h), P(x + 2 * w, y + h), P(x + 1.5 * w, y + h + 34)]); return svg(260, 165, s); }
+  const k = 60, x = 110, y = 60; s = sq(x, y, k, k) + pg([P(x, y), P(x + k, y), P(x + k / 2, y - 50)]) + pg([P(x, y + k), P(x + k, y + k), P(x + k / 2, y + k + 50)]) + pg([P(x, y), P(x, y + k), P(x - 50, y + k / 2)]) + pg([P(x + k, y), P(x + k, y + k), P(x + k + 50, y + k / 2)]);
+  return svg(280, 180, s); }
+
+/* ---------- topics & templates (Stage 7) ---------- */
+const PLACE = ['thousands', 'hundreds', 'tens', 'units', 'tenths', 'hundredths', 'thousandths'];
+const cap = s => s[0].toUpperCase() + s.slice(1);
+const roundDP = (x, k) => (Math.round(x * 10 ** k + 1e-9) / 10 ** k).toFixed(k);
+const TOPICS = [
+  { id: 'pv', name: 'Place value and rounding', t: [
+    () => { const ds = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 5); const num = `${ds[0]}${ds[1]}.${ds[2]}${ds[3]}${ds[4]}`; const pos = rnd(0, 4); const names = ['tens', 'units', 'tenths', 'hundredths', 'thousandths']; const d = ds[pos];
+      return { q: `What is the <b>value of the digit ${d}</b> in ${m(num)}?`, c: `${d} ${names[pos]}`, w: shuffle(names.filter((_, i) => i !== pos)).slice(0, 3).map(n => `${d} ${n}`), layout: 2 }; },
+    () => { const x = rnd(11, 9999) / pick([1, 10, 100, 1000]); const p = pick([10, 100, 1000]), mulOp = Math.random() < .5; const C = fx(mulOp ? x * p : x / p);
+      const w = pool(C, [x * 10, x * 100, x * 1000, x / 10, x / 100, x / 1000, x].map(fx)); return w && { q: `<b>Work out</b> ${m(`${big(x)} ${mulOp ? '\\times' : '\\div'} ${p}`)}`, c: M(C), w: w.map(M) }; },
+    () => { const k = pick([1, 2]); const x = rnd(10001, 99999) / 10000 * pick([1, 10]); const xs = x.toFixed(4); const C = roundDP(x, k); const tr = (Math.floor(x * 10 ** k + 1e-9) / 10 ** k).toFixed(k);
+      const cands = [tr, roundDP(x, k + 1), roundDP(x, k === 1 ? 2 : 1), (Math.ceil(x * 10 ** k - 1e-9) / 10 ** k).toFixed(k), roundDP(x, 0), (+C + 1 / 10 ** k).toFixed(k)].filter(v => +v !== +C);
+      const w = pool(C, cands); return w && { q: `<b>Round</b> ${m(xs)} to <b>${k} decimal place${k > 1 ? 's' : ''}</b>.`, c: m(C), w: w.map(m) }; },
+    () => { const a = rnd(1, 9), b = rnd(1, 9), big_ = Math.random() < .5; const vals = [`${a}.${b}`, `${a}.0${b}`, `${a}.${b}${rnd(1, 9)}`, `${a}.00${b}`];
+      const sorted = vals.slice().sort((p, q) => +p - +q); const C = big_ ? sorted[3] : sorted[0]; return { q: `Which number is the <b>${big_ ? 'largest' : 'smallest'}</b>?`, c: m(C), w: vals.filter(v => v !== C).map(m) }; },
+    () => { const x = rnd(11, 99) / 10, p = pick([10, 100, 1000]); return { q: `${m(`${fx(x)} \\times \\square = ${big(x * p)}`)}. What number goes in the <b>box</b>?`, c: M(p), w: [10, 100, 1000, 10000, 0.1].filter(v => v !== p).slice(0, 3).map(M) }; },
+    () => { const v = shuffle([rnd(1, 9) + rnd(1, 9) / 10, rnd(1, 9) + rnd(1, 99) / 100]); const a = fx(v[0]), b = fx(v[1]); if (+a === +b) return null; const C = +a > +b ? '>' : '<';
+      return { q: `Which <b>symbol</b> makes this true? &nbsp;${m(`${a} \\ \\square\\ ${b}`)}`, c: m(C), w: ['>', '<', '='].filter(s => s !== C).concat(['\\ge']).slice(0, 3).map(m) }; },
+  ]},
+  { id: 'neg', name: 'Negative numbers and calculations', t: [
+    () => { const a = rnd(2, 15), b = rnd(2, 15), t = pick([0, 1, 2, 3]); const ex = [`-${a} + ${b}`, `${a} - ${a + b}`, `-${a} - ${b}`, `-${a} - (-${b})`][t]; const C = [-a + b, -b, -a - b, -a + b][t];
+      const w = pool(String(C), [-C, a + b, -(a + b), C + 2, C - 2].map(String)); return w && { q: `<b>Work out</b> ${m(ex)}`, c: M(C), w: w.map(M) }; },
+    () => { const s = -rnd(2, 12), r = rnd(3, 15), t = pick(['rise', 'fall', 'diff']); let q, C;
+      if (t === 'rise') { q = `The temperature is ${m(`${s}^\\circ\\text{C}`)}. It <b>rises</b> by ${r}°C. What is the new temperature?`; C = s + r; }
+      else if (t === 'fall') { q = `The temperature is ${m(`${-s}^\\circ\\text{C}`)}. It <b>falls</b> by ${r - s}°C. What is the new temperature?`; C = -r; }
+      else { q = `At night it is ${m(`${s}^\\circ\\text{C}`)}. In the day it is ${m(`${r}^\\circ\\text{C}`)}. What is the <b>difference</b> in temperature?`; C = r - s; }
+      const w = pool(String(C), [-C, C + 2, C - 2, Math.abs(r + s), r + s].map(String)); const f = v => m(`${v}^\\circ\\text{C}`); return w && { q, c: f(C), w: w.map(f) }; },
+    () => { const a = rnd(2, 12), b = rnd(2, 12), t = pick([0, 1, 2, 3]); const ex = [`(-${a}) \\times ${b}`, `${a} \\times (-${b})`, `(-${a * b}) \\div ${b}`, `${a * b} \\div (-${a})`][t]; const C = [-a * b, -a * b, -a, -b][t];
+      const w = pool(String(C), [-C, C * 2, -C + 1, a + b, -(a + b)].map(String)); return w && { q: `<b>Work out</b> ${m(ex)}`, c: M(C), w: w.map(M) }; },
+    () => { const a = rnd(2, 12), b = rnd(2, 5), c = rnd(2, 6), t = pick([0, 1, 2]); let ex, C, W;
+      if (t === 0) { ex = `${a} + ${b}^2 \\times ${c}`; C = a + b * b * c; W = [(a + b * b) * c, a + (b * c) ** 2, a + 2 * b * c]; }
+      else if (t === 1) { ex = `(${a} - ${b})^2 + ${c}`; C = (a - b) ** 2 + c; W = [a * a - b * b + c, (a - b) * 2 + c, a - b * b + c]; }
+      else { ex = `${c} \\times (${a} - ${a + b}) + ${b}^2`; C = c * (-b) + b * b; W = [c * b + b * b, c * (-b) + 2 * b, c * a - a - b + b * b]; }
+      const w = pool(String(C), W.map(String)); return w && { q: `<b>Work out</b> ${m(ex)}`, c: M(C), w: w.map(M) }; },
+    () => { const bs = rnd(2, 7), a = rnd(2, 6), b = rnd(2, 5), mulOp = Math.random() < .5; const C = mulOp ? `${bs}^{${a + b}}` : `${bs}^{${a}}`; const top = mulOp ? `${bs}^{${a}} \\times ${bs}^{${b}}` : `${bs}^{${a + b}} \\div ${bs}^{${b}}`;
+      const w = pool(C, mulOp ? [`${bs}^{${a * b}}`, `${bs * 2}^{${a + b}}`, `${bs * bs}^{${a + b}}`] : [`${bs}^{${a + 2 * b}}`, `1^{${a}}`, `${bs}^{${b}}`]); return w && { q: `<b>Simplify</b> ${m(top)}. Write your answer as a <b>power</b>.`, c: m(C), w: w.map(m) }; },
+    () => { const X = pick([50, 40, 30, 20]), Y = pick([20, 30, 40, 60]); const xs = X - pick([1, 2]), ys = Y + pick([1, 2]); const C = -X * Y;
+      const w = pool(String(C), [X * Y, -X * Y / 10, -X * Y * 10].map(String)); return w && { q: `<b>Estimate</b> ${m(`(-${xs}) \\times ${ys}`)} by rounding each number to <b>1 significant figure</b>.`, c: M(C), w: w.map(M) }; },
+  ]},
+  { id: 'num', name: 'Number types: factors, multiples and roots', t: [
+    () => { const d = pick([3, 4, 6, 9]); let N; do { N = rnd(12, 110) * d; } while (N < 100 || N > 999); const others = []; let k = N + 1; while (others.length < 3) { if (k % d !== 0) others.push(k + rnd(0, 0)); k += rnd(1, 7); }
+      return { q: `Which number is <b>divisible by ${d}</b>?`, c: M(N), w: others.map(M) }; },
+    () => { const f = pick([3, 4, 6, 7, 8, 9, 11, 12]), g = rnd(11, 40), N = f * g; const non = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12].filter(v => N % v !== 0); if (non.length < 3) return null;
+      return { q: `Which of these is a <b>factor</b> of ${m(N)}?`, c: M(f), w: shuffle(non).slice(0, 3).map(M) }; },
+    () => { const h = pick([2, 3, 4, 5, 6, 7, 8]); let p, q; do { p = rnd(2, 9); q = rnd(2, 9); } while (p === q || gcd(p, q) !== 1 || h * p >= 100 || h * q >= 100 || lcm(h * p, h * q) >= 100); const A = h * p, B = h * q, L = lcm(A, B), H = Math.random() < .5; const C = String(H ? h : L);
+      const w = pool(C, (H ? [L, Math.min(A, B), 2 * h, h > 2 ? h - 1 : h + 1] : [A * B, h, L + h, 2 * L]).map(String)); return w && { q: `Find the <b>${H ? 'highest common factor (HCF)' : 'lowest common multiple (LCM)'}</b> of ${A} and ${B}.`, c: C, w }; },
+    () => { const k = rnd(2, 12), t = pick(['sqrt', 'sq', 'cbrt', 'cube']); const kc = rnd(2, 6);
+      if (t === 'sqrt') { const w = pool(String(k), [String(k * k / 2), String(2 * k), String(k + 1)]); return w && { q: `<b>Work out</b> ${m(`\\sqrt{${k * k}}`)}`, c: M(k), w: w.map(M) }; }
+      if (t === 'sq') { const w = pool(String(k * k), [String(2 * k), String(k + 2), String(k * k + k)]); return w && { q: `<b>Work out</b> ${m(`${k}^2`)}`, c: M(k * k), w: w.map(M) }; }
+      if (t === 'cbrt') { const w = pool(String(kc), [String(kc ** 3 / 3), String(kc * kc), String(kc + 1)].map(v => v.includes('.') ? String(kc + 2) : v)); return w && { q: `<b>Work out</b> ${m(`\\sqrt[3]{${kc ** 3}}`)}`, c: M(kc), w: w.map(M) }; }
+      const w = pool(String(kc ** 3), [String(3 * kc), String(kc * kc), String(kc ** 3 + kc)]); return w && { q: `<b>Work out</b> ${m(`${kc}^3`)}`, c: M(kc ** 3), w: w.map(M) }; },
+    () => { const pr = pick([31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]); const comp = shuffle([33, 39, 49, 51, 57, 63, 69, 77, 81, 87, 91, 93]).slice(0, 3);
+      return { q: 'Which number is a <b>prime number</b>?', c: M(pr), w: comp.map(M) }; },
+    () => { const t = pick(['ribbon', 'lights']); if (t === 'ribbon') { const h = pick([4, 6, 8, 9, 12]); let p, q; do { p = rnd(2, 7); q = rnd(2, 7); } while (p === q || gcd(p, q) !== 1 || h * p > 99 || h * q > 99); const A = h * p, B = h * q;
+        const w = pool(String(h), [String(lcm(A, B)), String(h / 2), String(2 * h), String(Math.abs(A - B))]); return w && { q: `Two ribbons are <b>${A} cm</b> and <b>${B} cm</b> long. They are cut into pieces that are all the <b>same length</b>, with nothing left over. What is the <b>longest</b> each piece can be?`, c: h + ' cm', w: w.map(v => v + ' cm') }; }
+      const [a, b] = shuffle([4, 6, 8, 9, 10, 12, 15]).slice(0, 2); const L = lcm(a, b); const w = pool(String(L), [String(a * b), String(a + b), String(gcd(a, b)), String(2 * L)]);
+      return w && { q: `One light flashes every <b>${a} seconds</b>, another every <b>${b} seconds</b>. They flash together now. After how many seconds do they next flash <b>together</b>?`, c: L + ' s', w: w.map(v => v + ' s') }; },
+  ]},
+  { id: 'alg', name: 'Manipulating algebra', t: [
+    () => { const t = Math.random() < .5; if (t) { const a = rnd(3, 9), c = rnd(1, a - 1), b = rnd(1, 9), d = rnd(1, 9); const C = poly([[a - c, 'x'], [b + d, '']]); const w = pool(C, [poly([[a + c, 'x'], [b + d, '']]), poly([[a - c, 'x'], [b - d, '']]), `${a - c + b + d}x`]); return w && { q: `<b>Simplify</b> ${m(`${a}x + ${b} - ${c}x + ${d}`)}`, c: m(C), w: w.map(m) }; }
+      const a = rnd(3, 9), c = rnd(1, a - 1), b = rnd(1, 9), d = rnd(1, 9); const C = poly([[a - c, 'a'], [b + d, 'b']]); const w = pool(C, [poly([[a + c, 'a'], [b + d, 'b']]), poly([[a - c, 'a'], [b - d, 'b']]), `${a - c + b + d}ab`]); return w && { q: `<b>Simplify</b> ${m(`${a}a + ${b}b - ${c}a + ${d}b`)}`, c: m(C), w: w.map(m) }; },
+    () => { const k = rnd(2, 9), b = nz(-9, 9), v = pick(['x', 'y', 'n']); const C = poly([[k, v], [k * b, '']]); const w = pool(C, [poly([[k, v], [b, '']]), poly([[k, v], [-k * b, '']]), poly([[k + 1, v], [k * b, '']]), `${k * (1 + b)}${v}`]);
+      return w && { q: `<b>Expand</b> ${m(`${k}(${poly([[1, v], [b, '']])})`)}`, c: m(C), w: w.map(m) }; },
+    () => { const p = rnd(2, 6), q = rnd(2, 6), a = nz(-5, 6), b = nz(-5, 6); const C = p * a + q * b; const w = pool(String(C), [p + a + q + b, p * a - q * b, -C, p * a * q * b].map(String));
+      return w && { q: `Find the <b>value</b> of ${m(`${p}a + ${q}b`)} when ${m(`a = ${a}`)} and ${m(`b = ${b}`)}.`, c: M(C), w: w.map(M) }; },
+    () => { const k = rnd(2, 9); const S = pick([
+        [`Ali has ${m('n')} sweets. He is given <b>${k} more</b>. How many sweets does he have now?`, `n + ${k}`, [`n - ${k}`, `${k}n`, `\\dfrac{n}{${k}}`]],
+        [`Bek has ${m('n')} stickers. Sara has <b>${k} times as many</b>. How many stickers does Sara have?`, `${k}n`, [`n + ${k}`, `\\dfrac{n}{${k}}`, `n - ${k}`]],
+        [`${m('n')} sweets are <b>shared equally</b> between ${k} children. How many does each child get?`, `\\dfrac{n}{${k}}`, [`${k}n`, `n - ${k}`, `\\dfrac{${k}}{n}`]],
+        [`A pencil costs ${m('p')} cents. A pen costs <b>${k * 5} cents more</b>. How much does the pen cost?`, `p + ${k * 5}`, [`${k * 5}p`, `p - ${k * 5}`, `${k * 5} - p`]],
+        [`Aziza is ${m('y')} years old. Her brother is <b>${k} years younger</b>. How old is her brother?`, `y - ${k}`, [`${k} - y`, `y + ${k}`, `${k}y`]],
+      ]); return { q: S[0] + ' Which <b>expression</b> is correct?', c: m(S[1]), w: S[2].map(m) }; },
+    () => { const a = rnd(2, 9), b = rnd(2, 9); const S = pick([
+        [`${a} \\times y`, `${a}y`, [`y${a}`, `${a} + y`, `y^{${a}}`]],
+        [`m + m + m`, `3m`, [`m^3`, `3 + m`, `mmm`]],
+        [`${a}a \\times ${b}`, `${a * b}a`, [`${a + b}a`, `${a}a${b}`, `${a * b}a^2`]],
+        [`a \\times b \\times ${a}`, `${a}ab`, [`ab${a}`, `${a} + ab`, `${a}a + b`]],
+        [`${a * b}x \\div ${a}`, `${b}x`, [`${a * b - a}x`, `${b}`, `${a}x`]],
+      ]); const w = pool(S[1], S[2]); return w && { q: `<b>Simplify</b> ${m(S[0])}`, c: m(S[1]), w: w.map(m) }; },
+  ]},
+  { id: 'form', name: 'Using expressions and formulae', t: [
+    () => { const k = rnd(3, 12); const S = pick([
+        [`Each ticket costs <b>$${k}</b>. ${m('T')} is the total cost of ${m('n')} tickets.`, `T = ${k}n`, [`T = n + ${k}`, `T = \\dfrac{n}{${k}}`, `n = ${k}T`]],
+        [`A box holds <b>${k} eggs</b>. ${m('E')} is the number of eggs in ${m('b')} boxes.`, `E = ${k}b`, [`E = b + ${k}`, `b = ${k}E`, `E = \\dfrac{b}{${k}}`]],
+        [`Ali is <b>${k} years older</b> than Bek. ${m('A')} is Ali's age and ${m('B')} is Bek's age.`, `A = B + ${k}`, [`B = A + ${k}`, `A = ${k}B`, `A = B - ${k}`]],
+        [`${m('s')} sweets are shared equally between <b>${k} friends</b>. Each friend gets ${m('F')} sweets.`, `F = \\dfrac{s}{${k}}`, [`F = ${k}s`, `F = s - ${k}`, `s = \\dfrac{F}{${k}}`]],
+      ]); return { q: S[0] + ' Which <b>formula</b> is correct?', c: m(S[1]), w: S[2].map(m) }; },
+    () => { const t = pick([0, 1, 2]); const s = rnd(3, 15), l = rnd(4, 20), w_ = rnd(2, 12), n = rnd(3, 20);
+      const S = [[`P = 4s`, `s = ${s}`, 4 * s, [s + 4, s * s, 2 * s]], [`A = lw`, `l = ${l}\\text{ and } w = ${w_}`, l * w_, [l + w_, 2 * (l + w_), l * w_ * 2]], [`C = 5n`, `n = ${n}`, 5 * n, [n + 5, 50 * n, 5 + 5 * n]]][t];
+      const w = pool(String(S[2]), S[3].map(String)); return w && { q: `Use the <b>formula</b> ${m(S[0])} to find the value when ${m(S[1])}.`, c: M(S[2]), w: w.map(M) }; },
+    () => { const k = rnd(2, 12); const S = pick([[`n + ${k}`, `${k} more than ${m('n')}`], [`n - ${k}`, `${k} less than ${m('n')}`], [`${k}n`, `${k} times ${m('n')}`], [`\\dfrac{n}{${k}}`, `${m('n')} divided by ${k}`]]);
+      const all = [`${k} more than ${m('n')}`, `${k} less than ${m('n')}`, `${k} times ${m('n')}`, `${m('n')} divided by ${k}`, `${m('n')} less than ${k}`];
+      return { q: `Which words describe ${m(S[0])}?`, c: S[1], w: shuffle(all.filter(v => v !== S[1])).slice(0, 3), layout: 2 }; },
+    () => { const p = pick([15, 20, 25, 30, 35, 40]), x = rnd(3, 12); const C = p * x; const w = pool(String(C), [p + x, p * x * 10, p * (x + 1)].map(String));
+      return w && { q: `Apples cost <b>${p} cents</b> each. The formula for the total cost is ${m(`T = ${p}x`)}, where ${m('x')} is the number of apples. Find ${m('T')} when ${m(`x = ${x}`)}.`, c: C + ' cents', w: w.map(v => v + ' cents') }; },
+  ]},
+  { id: 'eq', name: 'Equations and inequalities', t: [
+    () => { const x0 = rnd(2, 20), a = rnd(2, 15), t = pick([0, 1, 2, 3, 4]); let ex, W;
+      if (t === 0) { ex = `x + ${a} = ${x0 + a}`; W = [x0 + 2 * a, a, x0 + a]; }
+      else if (t === 1) { ex = `x - ${a} = ${x0}`; W = [x0 - a, x0, a - x0]; return (() => { const C = String(x0 + a); const w = pool(C, W.map(String)); return w && { q: `<b>Solve</b> ${m(ex)}`, c: m(`x = ${C}`), w: w.map(v => m(`x = ${v}`)) }; })(); }
+      else if (t === 2) { const k = rnd(2, 9); ex = `${k}x = ${k * x0}`; W = [k * x0 - k, k * x0 * k, x0 + k]; }
+      else if (t === 3) { const k = rnd(2, 6); const X = k * x0; ex = `\\dfrac{x}{${k}} = ${x0}`; const w = pool(String(X), [x0 + k, x0 - k, X + k].map(String)); return w && { q: `<b>Solve</b> ${m(ex)}`, c: m(`x = ${X}`), w: w.map(v => m(`x = ${v}`)) }; }
+      else { const k = rnd(2, 6), b = rnd(1, 15); ex = `${k}x + ${b} = ${k * x0 + b}`; W = [(k * x0 + 2 * b) / k, k * x0, x0 + b]; }
+      const w = pool(String(x0), W.map(fx)); return w && { q: `<b>Solve</b> ${m(ex)}`, c: m(`x = ${x0}`), w: w.map(v => m(`x = ${v}`)) }; },
+    () => { const k = rnd(2, 9), x0 = rnd(3, 15), t = pick([0, 1, 2]); const S = [
+        [`I think of a number ${m('x')}. I <b>multiply</b> it by ${k}. The answer is ${k * x0}.`, `${k}x = ${k * x0}`, [`x + ${k} = ${k * x0}`, `\\dfrac{x}{${k}} = ${k * x0}`, `x - ${k} = ${k * x0}`]],
+        [`I think of a number ${m('x')}. I <b>add</b> ${k}. The answer is ${x0 + k}.`, `x + ${k} = ${x0 + k}`, [`${k}x = ${x0 + k}`, `x - ${k} = ${x0 + k}`, `${k} - x = ${x0 + k}`]],
+        [`I think of a number ${m('x')}. I <b>subtract</b> ${k}. The answer is ${x0}.`, `x - ${k} = ${x0}`, [`${k} - x = ${x0}`, `x + ${k} = ${x0}`, `${k}x = ${x0}`]],
+      ][t]; return { q: S[0] + ' Which <b>equation</b> is correct?', c: m(S[1]), w: S[2].map(m) }; },
+    () => { const a = rnd(5, 30), x0 = rnd(5, 40); const C = String(x0); const w = pool(C, [String(x0 + 2 * a), String(a), String(x0 + 1)]);
+      return w && { q: `A number <b>plus ${a}</b> equals ${x0 + a}. What is the number?`, c: M(C), w: w.map(M) }; },
+    () => { const L = rnd(-4, 5), dir = pick(['gt', 'lt']); const C = `x ${dir === 'gt' ? '>' : '<'} ${L}`; const all = ['>', '<', '\\ge', '\\le'].map(o => `x ${o} ${L}`);
+      return { q: 'Which <b>inequality</b> is shown on the number line?', fig: numberLine(L, L, false, false, dir), c: m(C), w: all.filter(v => v !== C).map(m) }; },
+    () => { const a = rnd(-3, 8), gt = Math.random() < .5; const C = gt ? a + rnd(1, 3) : a - rnd(1, 3); const W = gt ? [a, a - 1, a - rnd(2, 4)] : [a, a + 1, a + rnd(2, 4)]; const w = pool(String(C), W.map(String));
+      return w && { q: `Which number <b>satisfies</b> the inequality ${m(`x ${gt ? '>' : '<'} ${a}`)}?`, c: M(C), w: w.map(M) }; },
+  ]},
+  { id: 'poly', name: 'Polygons, circles and symmetry', t: [
+    () => { const n = pick([5, 6, 7, 8, 9, 10]); const names = { 5: 'Pentagon', 6: 'Hexagon', 7: 'Heptagon', 8: 'Octagon', 9: 'Nonagon', 10: 'Decagon' }; const w = shuffle(Object.keys(names).filter(k => +k !== n)).slice(0, 3).map(k => 'Regular ' + names[k].toLowerCase());
+      return { q: 'What is the <b>name</b> of this regular polygon?', fig: regPoly(n), c: 'Regular ' + names[n].toLowerCase(), w, layout: 2 }; },
+    () => { const n = pick([3, 4, 5, 6, 8]), ask = pick(['lines', 'order']); const w = pool(String(n), [String(n - 1), String(n + 1), String(2 * n), n % 2 === 0 ? String(n / 2) : null]);
+      return w && { q: `This is a <b>regular polygon</b>. ${ask === 'lines' ? 'How many <b>lines of symmetry</b> does it have?' : 'What is its <b>order of rotational symmetry</b>?'}`, fig: regPoly(n), c: String(n), w }; },
+    () => { const D = { square: [4, 4], rectangle: [2, 2], rhombus: [2, 2], parallelogram: [0, 2], kite: [1, 1], 'isosceles trapezium': [1, 1] }; const nm = pick(Object.keys(D)), ask = pick([0, 1]); const C = String(D[nm][ask]);
+      const w = pool(C, ['0', '1', '2', '3', '4']); return w && { q: `This is a <b>${nm}</b>. ${ask === 0 ? 'How many <b>lines of symmetry</b> does it have?' : 'What is its <b>order of rotational symmetry</b>?'}`, fig: svg(290, 190, QUADS[nm]()), c: C, w }; },
+    () => { const S = pick([['OA', 'radius'], ['BC', 'diameter'], ['DE', 'chord'], ['PQ', 'tangent'], ['O', 'centre']]); const all = ['radius', 'diameter', 'chord', 'tangent', 'centre', 'circumference'];
+      const q = S[0] === 'O' ? 'What is the point <b>O</b> called?' : `What is the line <b>${S[0]}</b> called?`; return { q, fig: circlePartsFig(), c: cap(S[1]), w: shuffle(all.filter(v => v !== S[1])).slice(0, 3).map(cap) }; },
+    () => { const t = pick([['AB', 'PQ', ['QR', 'PR', 'RQ']], ['BC', 'QR', ['PQ', 'PR', 'QP']], ['AC', 'PR', ['PQ', 'QR', 'RQ']]]), len_ = rnd(4, 12), ang = Math.random() < .5;
+      if (ang) { const S = pick([['ABC', 'PQR', ['QPR', 'PRQ', 'RPQ']], ['BCA', 'QRP', ['PQR', 'QPR', 'RPQ']], ['CAB', 'RPQ', ['PQR', 'QRP', 'PRQ']]]); return { q: `Triangle ABC is <b>congruent</b> to triangle PQR. Which angle is <b>equal</b> to angle ${m(`${S[0]}`)}?`, fig: congFig(), c: 'Angle ' + S[1], w: S[2].map(v => 'Angle ' + v) }; }
+      return { q: `Triangle ABC is <b>congruent</b> to triangle PQR. ${t[0]} = ${len_} cm. Which side of triangle PQR is also <b>${len_} cm</b>?`, fig: congFig(), c: t[1], w: t[2].filter(v => v !== t[1]).slice(0, 2).concat([t[0]]) }; },
+    () => { const S = pick([
+        ['A <b>regular</b> polygon has…', 'all sides equal and all angles equal', ['all sides equal only', 'all angles equal only', 'exactly one line of symmetry']],
+        ['How many sides does a <b>hexagon</b> have?', '6', ['5', '7', '8']],
+        ['How many sides does an <b>octagon</b> have?', '8', ['6', '7', '10']],
+        ['Which shape has <b>no</b> lines of symmetry?', 'Parallelogram', ['Rectangle', 'Kite', 'Isosceles triangle']],
+        ['What is the order of rotational symmetry of an <b>equilateral triangle</b>?', '3', ['1', '2', '6']],
+        ['The <b>diameter</b> of a circle is 18 cm. What is its <b>radius</b>?', '9 cm', ['36 cm', '18 cm', '6 cm']],
+      ]); return { q: S[0], c: S[1], w: S[2], layout: S[1].length > 12 ? 1 : 4 }; },
+  ]},
+  { id: 'area', name: 'Areas of 2D shapes', t: [
+    () => { const S = pick([['m^2', 'cm^2', 10000], ['cm^2', 'mm^2', 100], ['ha', 'm^2', 10000]]); const up = Math.random() < .5; const v = up ? rnd(2, 95) / pick([1, 10]) : rnd(2, 95) * S[2] / pick([1, 10]);
+      const C = up ? v * S[2] : v / S[2]; const W = [10, 100, 1000, 10000, 100000].filter(f => f !== S[2]).map(f => up ? v * f : v / f); const w = pool(fx(C), W.map(fx)); const u = s => s === 'ha' ? '\\text{ ha}' : `\\text{ ${s.replace('^2', '')}}^2`;
+      return w && { q: `<b>Convert</b> ${m(big(v) + u(up ? S[0] : S[1]))} to <b>${up ? S[1].replace('^2', '²') : S[0].replace('^2', '²')}</b>.`, c: m(big(C) + u(up ? S[1] : S[0])), w: w.map(x => m(big(x) + u(up ? S[1] : S[0]))) }; },
+    () => { let b, h; do { b = rnd(4, 16); h = rnd(3, 12); } while ((b * h) % 2); const C = String(b * h / 2); const w = pool(C, [String(b * h), String(b + h), String(2 * (b + h))]);
+      return w && { q: 'Find the <b>area</b> of the triangle.', fig: triFig(b, h), c: m(C + '\\text{ cm}^2'), w: w.map(v => m(v + '\\text{ cm}^2')) }; },
+    () => { const wv = rnd(4, 15), hv = rnd(2, 10), ask = pick(['area', 'perimeter']); const C = String(ask === 'area' ? wv * hv : 2 * (wv + hv)); const W = ask === 'area' ? [2 * (wv + hv), wv + hv, wv * hv * 2] : [wv * hv, wv + hv, 4 * wv]; const w = pool(C, W.map(String));
+      const un = ask === 'area' ? '\\text{ cm}^2' : '\\text{ cm}'; return w && { q: `Find the <b>${ask}</b> of the rectangle.`, fig: rectFig(wv, hv), c: m(C + un), w: w.map(v => m(v + un)) }; },
+    () => { const W = rnd(8, 16), H = rnd(6, 12), a = rnd(2, W - 4), b = rnd(2, H - 3); const C = String(W * H - a * b); const w = pool(C, [String(W * H), String(W * H + a * b), String(2 * (W + H)), String((W - a) * (H - b))]);
+      return w && { q: 'Find the <b>area</b> of this compound shape. All corners are right angles.', fig: lShapeFig(W, H, a, b), c: m(C + '\\text{ cm}^2'), w: w.map(v => m(v + '\\text{ cm}^2')) }; },
+    () => { let wv, h, t; do { wv = rnd(6, 14); h = rnd(4, 10); t = rnd(3, 8); } while ((wv * t) % 2); const C = String(wv * h + wv * t / 2); const w = pool(C, [String(wv * h + wv * t), String(wv * h), String(wv * t / 2 + h), String(2 * (wv + h) + t)]);
+      return w && { q: 'The shape is made from a <b>rectangle</b> and a <b>triangle</b>. Find its <b>total area</b>.', fig: houseFig(wv, h, t), c: m(C + '\\text{ cm}^2'), w: w.map(v => m(v + '\\text{ cm}^2')) }; },
+    () => { const b = pick([4, 6, 8, 10, 12]), h = rnd(3, 12); const A = b * h / 2; const C = String(h); const w = pool(C, [String(A / b), String(2 * A * b), String(A - b), String(2 * h)].filter(v => !v.includes('.')));
+      return w && { q: `A triangle has <b>area</b> ${m(`${A}\\text{ cm}^2`)} and <b>base</b> ${b} cm. What is its <b>height</b>?`, c: C + ' cm', w: w.map(v => v + ' cm') }; },
+  ]},
+  { id: '3d', name: '3D shapes', t: [
+    () => { const l = rnd(3, 12), w_ = rnd(2, 8), h = rnd(2, 9); const C = String(l * w_ * h); const w = pool(C, [String(2 * (l * w_ + l * h + w_ * h)), String(l + w_ + h), String(l * w_ + h), String(l * w_)]);
+      return w && { q: 'Find the <b>volume</b> of the cuboid.', fig: cuboidFig(l, w_, h), c: m(C + '\\text{ cm}^3'), w: w.map(v => m(v + '\\text{ cm}^3')) }; },
+    () => { if (Math.random() < .4) { const s = rnd(2, 10); const C = String(6 * s * s); const w = pool(C, [String(s ** 3), String(4 * s * s), String(12 * s)]); return w && { q: `A <b>cube</b> has edges of length ${s} cm. Find its <b>surface area</b>.`, c: m(C + '\\text{ cm}^2'), w: w.map(v => m(v + '\\text{ cm}^2')) }; }
+      const l = rnd(4, 12), w_ = rnd(2, 8), h = rnd(2, 9); const C = String(2 * (l * w_ + l * h + w_ * h)); const w = pool(C, [String(l * w_ * h), String(l * w_ + l * h + w_ * h), String(4 * (l + w_ + h))]);
+      return w && { q: 'Find the <b>surface area</b> of the cuboid.', fig: cuboidFig(l, w_, h), c: m(C + '\\text{ cm}^2'), w: w.map(v => m(v + '\\text{ cm}^2')) }; },
+    () => { const L = rnd(8, 14), D = rnd(3, 6), H1 = rnd(2, 5), l = rnd(3, L - 3), H2 = rnd(2, 5); const C = String(L * D * H1 + l * D * H2); const w = pool(C, [String(L * D * (H1 + H2)), String(L * D * H1), String(L * D * H1 + l * H2), String((L + l) * D * (H1 + H2))]);
+      return w && { q: 'This shape is made from <b>two cuboids</b>. Find its <b>total volume</b>.', fig: compCuboidFig(L, D, H1, l, H2), c: m(C + '\\text{ cm}^3'), w: w.map(v => m(v + '\\text{ cm}^3')) }; },
+    () => { const S = { cube: [6, 12, 8], cuboid: [6, 12, 8], 'triangular prism': [5, 9, 6], 'square-based pyramid': [5, 8, 5], 'triangular-based pyramid': [4, 6, 4] }; const nm = pick(Object.keys(S)), k = pick([0, 1, 2]); const ask = ['faces', 'edges', 'vertices'][k];
+      if (Math.random() < .4) { const pr = pick(['triangular prism', 'square-based pyramid', 'cuboid']); const [F, E, V] = S[pr]; return { q: `A 3D shape has <b>${F} faces</b>, <b>${E} edges</b> and <b>${V} vertices</b>. What is it?`, c: cap(pr), w: ['Triangular prism', 'Square-based pyramid', 'Cuboid', 'Triangular-based pyramid'].filter(v => v.toLowerCase() !== pr).slice(0, 3) }; }
+      const C = String(S[nm][k]); const w = pool(C, ['4', '5', '6', '8', '9', '12'].concat(S[nm].map(String))); return w && { q: `How many <b>${ask}</b> does a <b>${nm}</b> have?`, c: C, w }; },
+    () => { const kind = pick(['cube', 'cuboid', 'prism', 'pyramid']); const nm = { cube: 'Cube', cuboid: 'Cuboid', prism: 'Triangular prism', pyramid: 'Square-based pyramid' }; const all = ['Cube', 'Cuboid', 'Triangular prism', 'Square-based pyramid', 'Cylinder'];
+      return { q: 'Which <b>3D shape</b> can be made from this <b>net</b>?', fig: netFig(kind), c: nm[kind], w: shuffle(all.filter(v => v !== nm[kind])).slice(0, 3), layout: 2 }; },
+    () => { const S = pick([
+        ['What is the <b>plan view</b> (view from above) of a cylinder standing on its base?', 'A circle', ['A rectangle', 'A triangle', 'A square']],
+        ['What is the <b>front view</b> of a cylinder standing on its base?', 'A rectangle', ['A circle', 'A triangle', 'A hexagon']],
+        ['What is the <b>front view</b> of a cone standing on its base?', 'A triangle', ['A circle', 'A rectangle', 'A square']],
+        ['What is the <b>plan view</b> of a cube?', 'A square', ['A rectangle', 'A triangle', 'A circle']],
+        ['Which solid has <b>two identical ends</b> and the same cross-section all along its length?', 'A prism', ['A pyramid', 'A cone', 'A sphere']],
+        ['Which solid has a polygon <b>base</b> and triangular faces that meet at <b>one point</b>?', 'A pyramid', ['A prism', 'A cylinder', 'A cuboid']],
+      ]); return { q: S[0], c: S[1], w: S[2], layout: 2 }; },
+  ]},
+];
+
+function buildQ(topic) { for (let tries = 0; tries < 60; tries++) { const g = pick(topic.t); const r = g(); if (!r || !r.w || r.w.length !== 3) continue; const opts = [r.c, ...r.w]; if (new Set(opts).size !== 4) continue;
+  const order = shuffle([0, 1, 2, 3]); return { topic: topic.name, q: r.q, fig: r.fig || '', opts: order.map(i => opts[i]), ans: order.indexOf(0), g }; } throw new Error('gen failed ' + topic.id); }
+function makeTest(n = 20) {
+  const ts = shuffle(TOPICS); const per = ts.map((_, i) => Math.floor(n / ts.length) + (i < n % ts.length ? 1 : 0)); const qs = [];
+  ts.forEach((t, i) => { const used = new Set(); for (let k = 0; k < per[i]; k++) { let q, guard = 0; do { q = buildQ(t); guard++; } while (used.has(q.g) && guard < 25 && used.size < t.t.length); used.add(q.g); qs.push(q); } });
+  return shuffle(qs).map(({ g, ...rest }) => rest);
+}
+</script>
+
+<!-- ===================== APP ===================== -->
+<script>
+const $ = id => document.getElementById(id);
+const S = { name: '', test: [], picks: [], cur: 0 };
+const LET = ['A', 'B', 'C', 'D'];
+const typeset = el => { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {}); else setTimeout(() => typeset(el), 300); };
+const show = v => ['vStart', 'vTest', 'vRes'].forEach(k => $(k).classList.toggle('hidden', k !== v));
+
+$('topicChips').innerHTML = TOPICS.map(t => `<span class="chip">${t.name}</span>`).join('');
+
+$('startForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = $('fName').value.trim(), l = $('lName').value.trim();
+  if (!f || !l) { $('startErr').textContent = !f ? 'Ismingizni kiriting.' : 'Familiyangizni kiriting.'; (!f ? $('fName') : $('lName')).focus(); return; }
+  $('startErr').textContent = '';
+  S.name = f + ' ' + l; S.test = makeTest(15); S.picks = Array(15).fill(null); S.cur = 0; startTimer();
+  $('who').textContent = S.name; show('vTest'); renderNav(); renderQ(); window.scrollTo(0, 0);
+});
+
+function renderNav() {
+  $('nav').innerHTML = S.test.map((_, i) => `<button type="button" aria-label="Savol ${i + 1}" class="${S.picks[i] !== null ? 'done' : ''} ${i === S.cur ? 'cur' : ''}" data-i="${i}">${i + 1}</button>`).join('');
+  const done = S.picks.filter(p => p !== null).length;
+  $('answeredInfo').textContent = `Javob berildi: ${done} / ${S.test.length}`;
+  $('prog').style.width = (done / S.test.length * 100) + '%';
+}
+$('nav').addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (b) { S.cur = +b.dataset.i; renderNav(); renderQ(); } });
+
+function renderQ() {
+  const i = S.cur, q = S.test[i], last = i === S.test.length - 1;
+  $('qcard').innerHTML = `
+    <div class="qhead"><span class="qnum">Savol ${i + 1}</span><span class="tag">${q.topic}</span></div>
+    <div class="qtext">${q.q}</div>
+    ${q.fig ? `<div class="figure">${q.fig}</div>` : ''}
+    <div class="opts" role="radiogroup" aria-label="Javob variantlari">
+      ${q.opts.map((o, k) => `<button type="button" role="radio" aria-checked="${S.picks[i] === k}" class="opt ${S.picks[i] === k ? 'sel' : ''}" data-k="${k}"><span class="L">${LET[k]}</span><span>${o}</span></button>`).join('')}
+    </div>
+    <div class="foot">
+      <button class="btn" type="button" id="prev" ${i === 0 ? 'disabled' : ''}>← Oldingi</button>
+      <span class="muted kbd">Klaviatura: A–D yoki 1–4, ← →</span>
+      <div class="right">
+        ${last ? '' : `<button class="btn" type="button" id="next">Keyingi →</button>`}
+        <button class="btn ${last ? 'primary' : ''}" type="button" id="finish">Testni yakunlash</button>
+      </div>
+    </div>`;
+  typeset($('qcard'));
+}
+$('qcard').addEventListener('click', e => {
+  const o = e.target.closest('.opt');
+  if (o) { choose(+o.dataset.k); return; }
+  if (e.target.id === 'prev') go(-1);
+  if (e.target.id === 'next') go(1);
+  if (e.target.id === 'finish') askFinish();
+});
+function choose(k) {
+  S.picks[S.cur] = k;
+  document.querySelectorAll('#qcard .opt').forEach(b => { const on = +b.dataset.k === k; b.classList.toggle('sel', on); b.setAttribute('aria-checked', on); });
+  renderNav();
+}
+function go(d) { const n = S.cur + d; if (n < 0 || n >= S.test.length) return; S.cur = n; renderNav(); renderQ(); }
+document.addEventListener('keydown', e => {
+  if ($('vTest').classList.contains('hidden') || !$('confirm').classList.contains('hidden') || e.target.tagName === 'INPUT') return;
+  const k = e.key.toUpperCase(); const idx = LET.indexOf(k) >= 0 ? LET.indexOf(k) : ['1', '2', '3', '4'].indexOf(k);
+  if (idx >= 0) choose(idx); else if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+});
+
+function askFinish() {
+  const left = S.picks.filter(p => p === null).length;
+  $('cMsg').textContent = left ? `Siz hali ${left} ta savolga javob bermadingiz. Javobsiz savollar noto'g'ri hisoblanadi.` : 'Barcha savollarga javob berdingiz. Natijani ko\'rishga tayyormisiz?';
+  $('confirm').classList.remove('hidden'); $('cYes').focus();
+}
+$('cNo').onclick = () => $('confirm').classList.add('hidden');
+$('cYes').onclick = () => { $('confirm').classList.add('hidden'); finish(); };
+const LIMIT = 45 * 60; let tick = null;
+const mmss = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+function startTimer() { S.start = Date.now(); clearInterval(tick); const upd = () => { const left = Math.max(0, LIMIT - Math.floor((Date.now() - S.start) / 1000)); $('timer').textContent = mmss(left); $('timer').classList.toggle('low', left <= 300);
+  if (left === 0) { clearInterval(tick); $('confirm').classList.add('hidden'); S.timeUp = true; finish(); } }; S.timeUp = false; upd(); tick = setInterval(upd, 1000); }
+
+function finish() {
+  clearInterval(tick); const used = Math.min(LIMIT, Math.floor((Date.now() - S.start) / 1000));
+  const n = S.test.length; const right = S.test.filter((q, i) => S.picks[i] === q.ans).length; const pct = Math.round(right / n * 100);
+  const grade = pct >= 90 ? ['A\'lo!', 'good'] : pct >= 70 ? ['Yaxshi', 'good'] : pct >= 50 ? ['Qoniqarli', 'mid'] : ['Ko\'proq mashq qilish kerak', 'bad'];
+  const by = {}; S.test.forEach((q, i) => { by[q.topic] = by[q.topic] || [0, 0]; by[q.topic][1]++; if (S.picks[i] === q.ans) by[q.topic][0]++; });
+  const R = 62, Cc = 2 * Math.PI * R; const col = pct >= 70 ? 'var(--good)' : pct >= 50 ? 'var(--mark)' : 'var(--bad)';
+  const dd = new Date(), z = v => String(v).padStart(2, '0'); const date = `${z(dd.getDate())}.${z(dd.getMonth() + 1)}.${dd.getFullYear()}, ${z(dd.getHours())}:${z(dd.getMinutes())}`;
+  $('vRes').innerHTML = `
+    <div class="card score">
+      <svg class="ring" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="${pct} foiz">
+        <circle cx="80" cy="80" r="${R}" fill="none" stroke="var(--line)" stroke-width="14"/>
+        <circle cx="80" cy="80" r="${R}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${Cc * pct / 100} ${Cc}" transform="rotate(-90 80 80)"/>
+        <text x="80" y="86" text-anchor="middle" font-size="36" fill="var(--ink)">${pct}%</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="eyebrow">Natija</div>
+        <h2>${esc(S.name)}</h2>
+        <div class="big">${right} / ${n} <span class="muted" style="font-size:18px;font-weight:500">to'g'ri javob</span></div>
+        <div><span class="pill ${grade[1]}">${grade[0]}</span></div>
+        <div class="muted" style="font-size:14px">${date} · Sarflangan vaqt: ${mmss(used)}${S.timeUp ? ' (vaqt tugadi)' : ''}</div>
+      </div>
+    </div>
+    <div class="card"><h3 style="margin-bottom:14px">Mavzular bo'yicha</h3><div class="tbl">
+      ${Object.entries(by).map(([t, [a, b]]) => { const p = a / b * 100; return `<div class="trow"><span>${t}</span><div class="tbar"><span style="width:${p}%;background:${p >= 70 ? 'var(--good)' : p >= 50 ? 'var(--mark)' : 'var(--bad)'}"></span></div><span class="tnum">${a}/${b}</span></div>`; }).join('')}
+    </div></div>
+    <div class="card actions"><button class="btn primary" type="button" id="again">Yangi test boshlash</button><button class="btn" type="button" id="copy">Natijani nusxalash</button><span class="toast" id="toast"></span></div>
+    <h3>Javoblarni tekshirish</h3>
+    <div class="review">${S.test.map((q, i) => { const ok = S.picks[i] === q.ans, p = S.picks[i];
+      return `<div class="rv ${ok ? '' : 'x'}"><div class="qhead" style="margin:0"><span class="qnum" style="font-size:18px">${i + 1}. <span class="${ok ? 'ok' : 'no'}">${ok ? '✓ To\'g\'ri' : '✗ Noto\'g\'ri'}</span></span><span class="tag">${q.topic}</span></div>
+        <div class="qtext">${q.q}</div>${q.fig ? `<div class="figure">${q.fig}</div>` : ''}
+        <div class="ans"><span>Sizning javobingiz: <b class="${ok ? 'ok' : 'no'}">${p === null ? 'javob berilmagan' : LET[p] + ') ' + q.opts[p]}</b></span>${ok ? '' : `<span>To'g'ri javob: <b class="ok">${LET[q.ans]}) ${q.opts[q.ans]}</b></span>`}</div></div>`; }).join('')}</div>`;
+  show('vRes'); window.scrollTo(0, 0); typeset($('vRes'));
+  $('again').onclick = () => { $('fName').value = ''; $('lName').value = ''; show('vStart'); $('fName').focus(); };
+  $('copy').onclick = () => { const txt = `${S.name} — Year 7 Maths Test — ${right}/${n} (${pct}%) — vaqt ${mmss(used)} — ${date}`;
+    navigator.clipboard.writeText(txt).then(() => $('toast').textContent = 'Nusxalandi', () => $('toast').textContent = txt); };
+}
+function esc(s) { return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+</script>
+</body>
+</html>
